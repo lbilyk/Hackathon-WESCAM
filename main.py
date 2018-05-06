@@ -15,8 +15,8 @@ def capPropId(prop):
   return getattr(cv2 if OPCV3 else cv2.cv,
     ("" if OPCV3 else "CV_") + "CAP_PROP_" + prop)
 
-capture.set(capPropId("FRAME_WIDTH"), 640)
-capture.set(capPropId("FRAME_HEIGHT"), 480)
+capture.set(capPropId("FRAME_WIDTH"), 320)
+capture.set(capPropId("FRAME_HEIGHT"), 240)
 
 
 while(True):
@@ -25,13 +25,13 @@ while(True):
 
     if ret == True:
         # Our operations on the frame come here
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        cv2.imwrite('gray_image.png', gray)
+       # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        cv2.imwrite('gray_image.png',frame)
         cv2.putText(frame, "MASTER PROGRAMMER!!!!", (150, 440), cv2.FONT_HERSHEY_DUPLEX, .9, (50, 225, 50))
         # Display the resulting frame
-        cv2.imshow('frame',gray)
+        cv2.imshow('frame',frame)
 
-        define_Picture(gray)
+        define_Picture(frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
