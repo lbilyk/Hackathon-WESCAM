@@ -4,6 +4,7 @@
 
 import numpy as np
 import cv2
+from image_proc import define_Picture
 
 capture = cv2.VideoCapture(0)
 
@@ -29,6 +30,9 @@ while(True):
         cv2.putText(frame, "MASTER PROGRAMMER!!!!", (150, 440), cv2.FONT_HERSHEY_DUPLEX, .9, (50, 225, 50))
         # Display the resulting frame
         cv2.imshow('frame',gray)
+
+        define_Picture(gray)
+
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     else:
