@@ -1,3 +1,10 @@
+#TensorFlow designed and trained Convolution Neural Network to
+#recognize different common images such as flowers and animals
+
+#Adapted to work with American Sign Language as image recognition
+#Source: TensorFlow
+#Edited by Ferencz Dominguez, Lyubomyr Bilyk, Peter Socha, Nik Kershaw
+
 """
 The program applies Transfer Learning to this existing model and re-trains it to classify a new set of images.
 
@@ -8,12 +15,11 @@ You can replace the image_dir argument with any folder containing subfolders of
 images. The label for each image is taken from the name of the subfolder it's in.
 
 """
-#from __future__ import absolute_import
-#from __future__ import division
-#from __future__ import print_function
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
 
 import argparse
-#from datetime import datetime
 import hashlib
 import os.path
 import random
@@ -43,11 +49,12 @@ BOTTLENECK_TENSOR_NAME = 'pool_3/_reshape:0'
 BOTTLENECK_TENSOR_SIZE = 2048
 MODEL_INPUT_WIDTH = 299
 MODEL_INPUT_HEIGHT = 299
-MODEL_INPUT_DEPTH = 3
+MODEL_INPUT_DEPTH = 1
 JPEG_DATA_TENSOR_NAME = 'DecodeJpeg/contents:0'
 RESIZED_INPUT_TENSOR_NAME = 'ResizeBilinear:0'
 MAX_NUM_IMAGES_PER_CLASS = 2 ** 27 - 1  # ~134M
 
+sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
 
 def create_image_lists(image_dir, testing_percentage, validation_percentage):
     """
@@ -75,7 +82,7 @@ def create_image_lists(image_dir, testing_percentage, validation_percentage):
         if is_root_dir:
             is_root_dir = False
             continue
-        extensions = ['jpg', 'jpeg', 'JPG', 'JPEG']
+        extensions = ['jpg', 'jpeg', 'JPG', 'JPEG', 'PNG']
         file_list = []
         dir_name = os.path.basename(sub_dir)
         if dir_name == image_dir:
@@ -872,7 +879,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--image_dir',
         type=str,
-        default='./Training',
+        default='./dataset',
         help='Path to folders of labeled images.'
         )
     parser.add_argument(
@@ -896,7 +903,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--how_many_training_steps',
         type=int,
-        default=9200,
+        default=2000,
         help='How many training steps to run before ending.'
         )
     parser.add_argument(
@@ -920,7 +927,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--eval_step_interval',
         type=int,
-        default=2000,
+        default=100,
         help='How often to evaluate the training results.'
         )
     parser.add_argument(
@@ -964,7 +971,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--model_dir',
         type=str,
-        default='/tmp/imagenet',
+        default='inception',
         help="""\
         Path to classify_image_graph_def.pb,
         imagenet_synset_to_human_label_map.txt, and
@@ -974,7 +981,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--bottleneck_dir',
         type=str,
-        default='/tmp/bottleneck',
+        default='./bottleneck',
         help='Path to cache bottleneck layer values as files.'
         )
     parser.add_argument(
