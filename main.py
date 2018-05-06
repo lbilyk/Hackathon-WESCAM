@@ -10,14 +10,14 @@ capture = cv2.VideoCapture(0)
 
 from pkg_resources import parse_version
 OPCV3 = parse_version(cv2.__version__) >= parse_version('3')
-
+interpret = "A"
+accuracy = 92.4435
 def capPropId(prop):
   return getattr(cv2 if OPCV3 else cv2.cv,
     ("" if OPCV3 else "CV_") + "CAP_PROP_" + prop)
 
-capture.set(capPropId("FRAME_WIDTH"), 320)
-capture.set(capPropId("FRAME_HEIGHT"), 240)
-
+capture.set(capPropId("FRAME_WIDTH"), 640)
+capture.set(capPropId("FRAME_HEIGHT"), 480)
 
 while(True):
     # Capture frame-by-frame
@@ -25,13 +25,17 @@ while(True):
 
     if ret == True:
         # Our operations on the frame come here
-       # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        cv2.imwrite('gray_image.png',frame)
-        cv2.putText(frame, "MASTER PROGRAMMER!!!!", (150, 440), cv2.FONT_HERSHEY_DUPLEX, .9, (50, 225, 50))
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        standard = cv2.resize(gray, (320, 240))
+
+        # pass tbe image file to neural network to be tested against
+        #interpret, accuracy = nnetwork(standard)
+
+        #cv2.imwrite('gray_image.jpg', standard)
+        cv2.putText(frame, str(interpret), (278, 430), cv2.FONT_HERSHEY_DUPLEX, 2.3, (0, 255, 0))
+        cv2.putText(frame, "Accuracy: " + str(accuracy) + '%', (200, 460), cv2.FONT_HERSHEY_DUPLEX, 0.9, (0, 255, 0))
         # Display the resulting frame
         cv2.imshow('frame',frame)
-
-        define_Picture(frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
